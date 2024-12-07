@@ -28,6 +28,7 @@ def seed_torch(seed=1029):
 
 def main():
     opt = TrainOptions().parse()
+    opt.continue_train = True
     seed_torch(100)
 
     train_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "train"))
