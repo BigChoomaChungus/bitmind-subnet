@@ -14,7 +14,7 @@ IMAGE_DATASETS = {
     ],
     "fake": [
         #{"path": "bitmind/bm-realvisxl"},
-        {"path": "bitmind/bm-mobius"},
+        {"path": "bitmind/bm-mobius-10-17-24"},
         #{"path": "bitmind/bm-sdxl"}
     ]
 }
