@@ -8,13 +8,15 @@ IMAGE_DATASETS = {
     "real": [
         #{"path": "bitmind/bm-real"},
         #{"path": "bitmind/open-image-v7-256"}, open-image-v7-256
-        {"path": "bitmind/celeb-a-hq"},
+        ##{"path": "bitmind/celeb-a-hq"},
+        {"path": "/home/user/.cache/huggingface/celeb-a-hq"},
         #{"path": "bitmind/ffhq-256"},
         #{"path": "bitmind/MS-COCO-unique-256"}
     ],
     "fake": [
         #{"path": "bitmind/bm-realvisxl"},
-        {"path": "bitmind/bm-mobius-10-17-24"},
+        ##{"path": "bitmind/bm-mobius-10-17-24"},
+        {"path": "/home/user/.cache/huggingface/bm-mobius-10-17-24"},
         #{"path": "bitmind/bm-sdxl"}
     ]
 }
