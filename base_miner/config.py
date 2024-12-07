@@ -7,7 +7,7 @@ TARGET_IMAGE_SIZE = (256, 256)
 IMAGE_DATASETS = {
     "real": [
         {"path": "bitmind/bm-real"},
-        {"path": "bitmind/open-images-v7"},
+        #{"path": "bitmind/open-image-v7-256"}, open-image-v7-256
         {"path": "bitmind/celeb-a-hq"},
         {"path": "bitmind/ffhq-256"},
         {"path": "bitmind/MS-COCO-unique-256"}
