@@ -9,7 +9,7 @@ IMAGE_DATASETS = {
         #{"path": "bitmind/bm-real"},
         #{"path": "bitmind/open-image-v7-256"}, open-image-v7-256
         ##{"path": "bitmind/celeb-a-hq"},
-        {"path": "/home/user/.cache/huggingface/celeb-a-hq"},
+        {"path": "/home/user/.cache/huggingface/bitmind___celeb-a-hq/default/0.0.0/cec732e87335bc65872d90a706e865032daf80fc"},
         #{"path": "bitmind/ffhq-256"},
         #{"path": "bitmind/MS-COCO-unique-256"}
     ],
