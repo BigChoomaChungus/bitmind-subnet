@@ -33,8 +33,13 @@ class BaseModel(nn.Module):
 
     # load models from the disk
     def load_networks(self, epoch):
+        
         if self.continue_from_checkpoint:
             load_path = self.continue_from_checkpoint
+            try:
+                self.model.load_state_dict(state_dict['model'])
+            except KeyError as e:
+                self.model.load_state_dict(state_dict)
         else:
             load_filename = 'model_epoch_%s.pth' % epoch
             load_path = os.path.join(self.save_dir, load_filename)
