@@ -36,11 +36,6 @@ class BaseModel(nn.Module):
         
         if self.continue_from_checkpoint:
             load_path = self.continue_from_checkpoint
-
-            try:
-                self.model.load_state_dict(state_dict['model'])
-            except KeyError as e:
-                self.model.load_state_dict(state_dict)
         
         else:
             load_filename = 'model_epoch_%s.pth' % epoch
@@ -52,6 +47,11 @@ class BaseModel(nn.Module):
         state_dict = torch.load(load_path, map_location=self.device)
         if hasattr(state_dict, '_metadata'):
             del state_dict._metadata
+
+        try:
+            self.model.load_state_dict(state_dict['model'])
+        except KeyError as e:
+            self.model.load_state_dict(state_dict)
 
         self.model.load_state_dict(state_dict['model'])
         self.total_steps = state_dict['total_steps']
