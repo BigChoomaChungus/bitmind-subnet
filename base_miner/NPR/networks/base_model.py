@@ -34,17 +34,17 @@ class BaseModel(nn.Module):
     # load models from the disk
     def load_networks(self, epoch):
         
-        if self.continue_from_checkpoint:
-            load_path = self.continue_from_checkpoint
+        #if self.continue_from_checkpoint:
+        #    load_path = self.continue_from_checkpoint
 
-            try:
-                self.model.load_state_dict(state_dict['model'])
-            except KeyError as e:
-                self.model.load_state_dict(state_dict)
+        try:
+            self.model.load_state_dict(state_dict['model'])
+        except KeyError as e:
+            self.model.load_state_dict(state_dict)
         
-        else:
-            load_filename = 'model_epoch_%s.pth' % epoch
-            load_path = os.path.join(self.save_dir, load_filename)
+        #else:
+        #    load_filename = 'model_epoch_%s.pth' % epoch
+        #    load_path = os.path.join(self.save_dir, load_filename)
 
         print('loading the model from %s' % load_path)
         # if you are using PyTorch newer than 0.4 (e.g., built from
