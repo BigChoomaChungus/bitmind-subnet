@@ -53,7 +53,7 @@ class BaseModel(nn.Module):
         except KeyError as e:
             self.model.load_state_dict(state_dict)
 
-        self.model.load_state_dict(state_dict['model'])
+        #self.model.load_state_dict(state_dict['model'])
         self.total_steps = state_dict['total_steps']
 
         if self.isTrain and not self.opt.new_optim:
