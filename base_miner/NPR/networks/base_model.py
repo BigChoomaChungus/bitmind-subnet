@@ -56,16 +56,16 @@ class BaseModel(nn.Module):
         #self.model.load_state_dict(state_dict['model'])
         #self.total_steps = state_dict['total_steps']
 
-        if self.isTrain and not self.opt.new_optim:
-            self.optimizer.load_state_dict(state_dict['optimizer'])
-            ### move optimizer state to GPU
-            for state in self.optimizer.state.values():
-                for k, v in state.items():
-                    if torch.is_tensor(v):
-                        state[k] = v.to(self.device)
-
-            for g in self.optimizer.param_groups:
-                g['lr'] = self.opt.lr
+        #if self.isTrain and not self.opt.new_optim:
+        #    self.optimizer.load_state_dict(state_dict['optimizer'])
+        #    ### move optimizer state to GPU
+        #    for state in self.optimizer.state.values():
+        #        for k, v in state.items():
+        #            if torch.is_tensor(v):
+        #                state[k] = v.to(self.device)
+    
+        #    for g in self.optimizer.param_groups:
+        #        g['lr'] = self.opt.lr
 
     def eval(self):
         self.model.eval()
