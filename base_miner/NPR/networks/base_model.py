@@ -33,7 +33,7 @@ class BaseModel(nn.Module):
 
     # load models from the disk
     def load_networks(self, epoch):
-        if self.start_from_checkpoint:
+        if self.continue_from_checkpoint:
             load_path = self.continue_from_checkpoint
         else:
             load_filename = 'model_epoch_%s.pth' % epoch
