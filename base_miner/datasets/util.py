@@ -57,7 +57,7 @@ def load_and_split_datasets(
     datasets = {split: [] for split in splits}
 
     for meta in dataset_meta:
-        dataset = load_huggingface_dataset(meta['path'], None, meta.get('name'))
+        dataset = load_huggingface_dataset(meta['path'], None, meta.get('name'), download_mode="REUSE_DATASET_IF_EXISTS")
         train_ds, val_ds, test_ds = split_dataset(dataset)
 
         for split, data in zip(splits, [train_ds, val_ds, test_ds]):
