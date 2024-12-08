@@ -33,6 +33,7 @@ class BaseModel(nn.Module):
 
     # load models from the disk
     def load_networks(self, epoch):
+        state_dict = None
         
         if self.continue_from_checkpoint:
             load_path = self.continue_from_checkpoint
