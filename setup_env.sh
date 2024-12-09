@@ -14,7 +14,8 @@ sudo apt install -y \
     libgl1 \
     npm \
     ffmpeg \
-    unzip
+    unzip \
+    tensorRT
 
 # Install build dependencies
 sudo apt install -y \
