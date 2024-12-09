@@ -109,14 +109,16 @@ def create_source_label_mapping(
 
     return source_label_mapping
 
+from torch.utils.data import Subset
+
+
 def create_real_fake_datasets(
     real_datasets: Dict[str, List[ImageDataset]],
     fake_datasets: Dict[str, List[ImageDataset]],
     source_labels: bool = False,
     group_sources_by_name: bool = False) -> Tuple[RealFakeDataset, ...]:
     """
-    Adjust the dataset balancing logic to sum all real and fake datasets,
-    and use the smaller total for balancing. Handles slicing explicitly.
+    Adjust dataset balancing logic to handle Subset properly.
     """
     source_label_mapping = None
     if source_labels:
@@ -136,26 +138,28 @@ def create_real_fake_datasets(
     print(f"Total fake dataset size: {fake_total_size}")  # Debug line
     print(f"Balanced dataset size: {min_size}")  # Debug line
 
-    # Trim datasets to the balanced size using Subset
-    balanced_real_datasets = []
-    balanced_fake_datasets = []
-    real_count, fake_count = 0, 0
+    # Trim datasets to the balanced size and preserve original attributes
+    def create_balanced_subsets(datasets, total_count):
+        balanced_datasets = []
+        count = 0
 
-    for dataset in real_train_datasets:
-        if real_count >= min_size:
-            break
-        remaining = min_size - real_count
-        subset_indices = list(range(min(len(dataset), remaining)))
-        balanced_real_datasets.append(Subset(dataset, subset_indices))
-        real_count += len(subset_indices)
+        for dataset in datasets:
+            if count >= total_count:
+                break
+            remaining = total_count - count
+            subset_indices = list(range(min(len(dataset), remaining)))
 
-    for dataset in fake_train_datasets:
-        if fake_count >= min_size:
-            break
-        remaining = min_size - fake_count
-        subset_indices = list(range(min(len(dataset), remaining)))
-        balanced_fake_datasets.append(Subset(dataset, subset_indices))
-        fake_count += len(subset_indices)
+            # Preserve original dataset attributes
+            if hasattr(dataset, "huggingface_dataset_path"):
+                dataset.huggingface_dataset_path = getattr(dataset, "huggingface_dataset_path")
+
+            balanced_datasets.append(Subset(dataset, subset_indices))
+            count += len(subset_indices)
+
+        return balanced_datasets
+
+    balanced_real_datasets = create_balanced_subsets(real_train_datasets, min_size)
+    balanced_fake_datasets = create_balanced_subsets(fake_train_datasets, min_size)
 
     train_dataset = RealFakeDataset(
         real_image_datasets=balanced_real_datasets,
