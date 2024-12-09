@@ -109,7 +109,18 @@ def create_source_label_mapping(
 
     return source_label_mapping
 
+class PatchedSubset(Subset):
+    def __init__(self, dataset, indices):
+        super().__init__(dataset, indices)
+        # Copy necessary attributes from the original dataset
+        if hasattr(dataset, "huggingface_dataset_path"):
+            self.huggingface_dataset_path = dataset.huggingface_dataset_path
 
+    def __getattr__(self, attr):
+        # If an attribute is not found in Subset, fallback to the original dataset
+        if hasattr(self.dataset, attr):
+            return getattr(self.dataset, attr)
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attr}'")
 
 def create_real_fake_datasets(
     real_datasets: Dict[str, List[ImageDataset]],
