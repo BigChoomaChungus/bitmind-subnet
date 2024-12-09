@@ -21,12 +21,12 @@ class BaseModel(nn.Module):
         save_filename = 'model_epoch_%s.pth' % epoch
         save_path = os.path.join(self.save_dir, save_filename)
 
-        # serialize model and optimizer to dict
-        # state_dict = {
-        #     'model': self.model.state_dict(),
-        #     'optimizer' : self.optimizer.state_dict(),
-        #     'total_steps' : self.total_steps,
-        # }
+         serialize model and optimizer to dict
+         state_dict = {
+             'model': self.model.state_dict(),
+             'optimizer' : self.optimizer.state_dict(),
+             'total_steps' : self.total_steps,
+         }
 
         torch.save(self.model.state_dict(), save_path)
         print(f'Saving model {save_path}')
@@ -53,19 +53,19 @@ class BaseModel(nn.Module):
         except KeyError as e:
             self.model.load_state_dict(state_dict)
 
-        #self.model.load_state_dict(state_dict['model'])
-        #self.total_steps = state_dict['total_steps']
+        self.model.load_state_dict(state_dict['model'])
+        self.total_steps = state_dict['total_steps']
 
-        #if self.isTrain and not self.opt.new_optim:
-        #    self.optimizer.load_state_dict(state_dict['optimizer'])
-        #    ### move optimizer state to GPU
-        #    for state in self.optimizer.state.values():
-        #        for k, v in state.items():
-        #            if torch.is_tensor(v):
-        #                state[k] = v.to(self.device)
+        if self.isTrain and not self.opt.new_optim:
+            self.optimizer.load_state_dict(state_dict['optimizer'])
+            ### move optimizer state to GPU
+            for state in self.optimizer.state.values():
+                for k, v in state.items():
+                    if torch.is_tensor(v):
+                        state[k] = v.to(self.device)
     
-        #    for g in self.optimizer.param_groups:
-        #        g['lr'] = self.opt.lr
+            for g in self.optimizer.param_groups:
+                g['lr'] = self.opt.lr
 
     def eval(self):
         self.model.eval()
