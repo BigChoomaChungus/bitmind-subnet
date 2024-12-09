@@ -2,6 +2,7 @@ from typing import List, Tuple, Dict
 import torchvision.transforms as transforms
 import numpy as np
 import datasets
+from torch.utils.data import Subset
 
 from base_miner.datasets.download_data import load_huggingface_dataset
 from base_miner.datasets import ImageDataset, VideoDataset, RealFakeDataset
@@ -115,7 +116,7 @@ def create_real_fake_datasets(
     group_sources_by_name: bool = False) -> Tuple[RealFakeDataset, ...]:
     """
     Adjust the dataset balancing logic to sum all real and fake datasets,
-    and use the smaller total for balancing.
+    and use the smaller total for balancing. Handles slicing explicitly.
     """
     source_label_mapping = None
     if source_labels:
@@ -131,11 +132,11 @@ def create_real_fake_datasets(
     # Use the smaller total size for balancing
     min_size = min(real_total_size, fake_total_size)
 
-    print(f"Total real dataset size: {real_total_size}")  # TEST LINE
-    print(f"Total fake dataset size: {fake_total_size}")  # TEST LINE
-    print(f"Balanced dataset size: {min_size}")  # TEST LINE
+    print(f"Total real dataset size: {real_total_size}")  # Debug line
+    print(f"Total fake dataset size: {fake_total_size}")  # Debug line
+    print(f"Balanced dataset size: {min_size}")  # Debug line
 
-    # Trim datasets to the balanced size
+    # Trim datasets to the balanced size using Subset
     balanced_real_datasets = []
     balanced_fake_datasets = []
     real_count, fake_count = 0, 0
@@ -144,15 +145,17 @@ def create_real_fake_datasets(
         if real_count >= min_size:
             break
         remaining = min_size - real_count
-        balanced_real_datasets.append(dataset[:remaining])
-        real_count += len(balanced_real_datasets[-1])
+        subset_indices = list(range(min(len(dataset), remaining)))
+        balanced_real_datasets.append(Subset(dataset, subset_indices))
+        real_count += len(subset_indices)
 
     for dataset in fake_train_datasets:
         if fake_count >= min_size:
             break
         remaining = min_size - fake_count
-        balanced_fake_datasets.append(dataset[:remaining])
-        fake_count += len(balanced_fake_datasets[-1])
+        subset_indices = list(range(min(len(dataset), remaining)))
+        balanced_fake_datasets.append(Subset(dataset, subset_indices))
+        fake_count += len(subset_indices)
 
     train_dataset = RealFakeDataset(
         real_image_datasets=balanced_real_datasets,
@@ -175,6 +178,7 @@ def create_real_fake_datasets(
     if source_labels:
         return train_dataset, val_dataset, test_dataset, source_label_mapping
     return train_dataset, val_dataset, test_dataset
+
 
 def sample_dataset_index_name(image_datasets: list) -> tuple[int, str]:
     """
