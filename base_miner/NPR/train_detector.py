@@ -65,7 +65,7 @@ def main():
     model.train()
 
     print(f'cwd: {os.getcwd()}')
-    print(f"Train dataset size: {len(train_dataset)}") #TESTING LINE
+    print(f"FROM TRAIN_DETECTOR.PY: Train dataset size: {len(train_dataset)}") #TESTING LINE
     print(f"Validation dataset size: {len(val_dataset)}") #TESTING LINE
     print(f"Test dataset size: {len(test_dataset)}") #TESTING LINE
 
