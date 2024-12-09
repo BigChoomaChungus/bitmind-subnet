@@ -15,7 +15,7 @@ sudo apt install -y \
     npm \
     ffmpeg \
     unzip \
-    tensorRT
+    TensorRT
 
 # Install build dependencies
 sudo apt install -y \
