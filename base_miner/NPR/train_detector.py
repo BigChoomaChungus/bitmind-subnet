@@ -59,7 +59,7 @@ def main():
 
     model = Trainer(opt)
     display_loss_steps = 10
-    early_stopping_epochs = 10
+    early_stopping_epochs = 1000
     best_val_acc = 0
     n_epoch_since_improvement = 0
     model.train()
