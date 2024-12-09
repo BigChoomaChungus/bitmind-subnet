@@ -109,7 +109,6 @@ def create_source_label_mapping(
 
     return source_label_mapping
 
-from torch.utils.data import Subset
 
 
 def create_real_fake_datasets(
