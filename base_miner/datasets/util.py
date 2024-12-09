@@ -10,6 +10,89 @@ from base_miner.datasets import ImageDataset, VideoDataset, RealFakeDataset
 datasets.logging.set_verbosity_error()
 datasets.disable_progress_bar()
 
+class PatchedSubset(Subset):
+    def __init__(self, dataset, indices):
+        super().__init__(dataset, indices)
+        # Copy necessary attributes from the original dataset
+        if hasattr(dataset, "huggingface_dataset_path"):
+            self.huggingface_dataset_path = dataset.huggingface_dataset_path
+        if hasattr(dataset, "_history"):
+            self._history = dataset._history
+
+    def __getattr__(self, attr):
+        # If an attribute is not found in Subset, fallback to the original dataset
+        if hasattr(self.dataset, attr):
+            return getattr(self.dataset, attr)
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attr}'")
+        
+def create_balanced_subsets(datasets, total_count):
+    balanced_datasets = []
+    count = 0
+
+    for dataset in datasets:
+        if count >= total_count:
+            break
+        remaining = total_count - count
+        subset_indices = list(range(min(len(dataset), remaining)))
+
+        # Wrap with PatchedSubset to preserve attributes
+        balanced_datasets.append(PatchedSubset(dataset, subset_indices))
+        count += len(subset_indices)
+
+    return balanced_datasets
+
+def create_real_fake_datasets(
+    real_datasets: Dict[str, List[ImageDataset]],
+    fake_datasets: Dict[str, List[ImageDataset]],
+    source_labels: bool = False,
+    group_sources_by_name: bool = False) -> Tuple[RealFakeDataset, ...]:
+    """
+    Adjust dataset balancing logic to handle Subset properly.
+    """
+    source_label_mapping = None
+    if source_labels:
+        source_label_mapping = create_source_label_mapping(
+            real_datasets, fake_datasets, group_sources_by_name)
+
+    # Calculate total sizes for real and fake datasets
+    real_train_datasets = real_datasets['train']
+    fake_train_datasets = fake_datasets['train']
+    real_total_size = sum(len(dataset) for dataset in real_train_datasets)
+    fake_total_size = sum(len(dataset) for dataset in fake_train_datasets)
+
+    # Use the smaller total size for balancing
+    min_size = min(real_total_size, fake_total_size)
+
+    print(f"Total real dataset size: {real_total_size}")  # Debug line
+    print(f"Total fake dataset size: {fake_total_size}")  # Debug line
+    print(f"Balanced dataset size: {min_size}")  # Debug line
+
+    # Trim datasets to the balanced size and preserve original attributes
+    balanced_real_datasets = create_balanced_subsets(real_train_datasets, min_size)
+    balanced_fake_datasets = create_balanced_subsets(fake_train_datasets, min_size)
+
+    train_dataset = RealFakeDataset(
+        real_image_datasets=balanced_real_datasets,
+        fake_image_datasets=balanced_fake_datasets,
+        source_label_mapping=source_label_mapping,
+    )
+
+    val_dataset = RealFakeDataset(
+        real_image_datasets=real_datasets['validation'],
+        fake_image_datasets=fake_datasets['validation'],
+        source_label_mapping=source_label_mapping,
+    )
+
+    test_dataset = RealFakeDataset(
+        real_image_datasets=real_datasets['test'],
+        fake_image_datasets=fake_datasets['test'],
+        source_label_mapping=source_label_mapping,
+    )
+
+    if source_labels:
+        return train_dataset, val_dataset, test_dataset, source_label_mapping
+    return train_dataset, val_dataset, test_dataset
+
 
 def split_dataset(dataset):
     # Split data into train, validation, test and return the three splits
@@ -108,90 +191,6 @@ def create_source_label_mapping(
                     source_label_mapping[source] = max(source_label_mapping.values()) + 1
 
     return source_label_mapping
-
-class PatchedSubset(Subset):
-    def __init__(self, dataset, indices):
-        super().__init__(dataset, indices)
-        # Copy necessary attributes from the original dataset
-        if hasattr(dataset, "huggingface_dataset_path"):
-            self.huggingface_dataset_path = dataset.huggingface_dataset_path
-
-    def __getattr__(self, attr):
-        # If an attribute is not found in Subset, fallback to the original dataset
-        if hasattr(self.dataset, attr):
-            return getattr(self.dataset, attr)
-        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attr}'")
-
-def create_real_fake_datasets(
-    real_datasets: Dict[str, List[ImageDataset]],
-    fake_datasets: Dict[str, List[ImageDataset]],
-    source_labels: bool = False,
-    group_sources_by_name: bool = False) -> Tuple[RealFakeDataset, ...]:
-    """
-    Adjust dataset balancing logic to handle Subset properly.
-    """
-    source_label_mapping = None
-    if source_labels:
-        source_label_mapping = create_source_label_mapping(
-            real_datasets, fake_datasets, group_sources_by_name)
-
-    # Calculate total sizes for real and fake datasets
-    real_train_datasets = real_datasets['train']
-    fake_train_datasets = fake_datasets['train']
-    real_total_size = sum(len(dataset) for dataset in real_train_datasets)
-    fake_total_size = sum(len(dataset) for dataset in fake_train_datasets)
-
-    # Use the smaller total size for balancing
-    min_size = min(real_total_size, fake_total_size)
-
-    print(f"Total real dataset size: {real_total_size}")  # Debug line
-    print(f"Total fake dataset size: {fake_total_size}")  # Debug line
-    print(f"Balanced dataset size: {min_size}")  # Debug line
-
-    # Trim datasets to the balanced size and preserve original attributes
-    def create_balanced_subsets(datasets, total_count):
-        balanced_datasets = []
-        count = 0
-
-        for dataset in datasets:
-            if count >= total_count:
-                break
-            remaining = total_count - count
-            subset_indices = list(range(min(len(dataset), remaining)))
-
-            # Preserve original dataset attributes
-            if hasattr(dataset, "huggingface_dataset_path"):
-                dataset.huggingface_dataset_path = getattr(dataset, "huggingface_dataset_path")
-
-            balanced_datasets.append(Subset(dataset, subset_indices))
-            count += len(subset_indices)
-
-        return balanced_datasets
-
-    balanced_real_datasets = create_balanced_subsets(real_train_datasets, min_size)
-    balanced_fake_datasets = create_balanced_subsets(fake_train_datasets, min_size)
-
-    train_dataset = RealFakeDataset(
-        real_image_datasets=balanced_real_datasets,
-        fake_image_datasets=balanced_fake_datasets,
-        source_label_mapping=source_label_mapping,
-    )
-
-    val_dataset = RealFakeDataset(
-        real_image_datasets=real_datasets['validation'],
-        fake_image_datasets=fake_datasets['validation'],
-        source_label_mapping=source_label_mapping,
-    )
-
-    test_dataset = RealFakeDataset(
-        real_image_datasets=real_datasets['test'],
-        fake_image_datasets=fake_datasets['test'],
-        source_label_mapping=source_label_mapping,
-    )
-
-    if source_labels:
-        return train_dataset, val_dataset, test_dataset, source_label_mapping
-    return train_dataset, val_dataset, test_dataset
 
 
 def sample_dataset_index_name(image_datasets: list) -> tuple[int, str]:
