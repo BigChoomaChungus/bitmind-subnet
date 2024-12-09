@@ -21,7 +21,7 @@ class BaseModel(nn.Module):
         save_filename = 'model_epoch_%s.pth' % epoch
         save_path = os.path.join(self.save_dir, save_filename)
 
-        serialize model and optimizer to dict
+        serialize 'model' and 'optimizer' to dict
         state_dict = {
             'model': self.model.state_dict(),
             'optimizer' : self.optimizer.state_dict(),
