@@ -20,7 +20,7 @@ def seed_torch(seed=1029):
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
+    torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.enabled = False
@@ -29,13 +29,13 @@ def seed_torch(seed=1029):
 def main():
     opt = TrainOptions().parse()
     opt.niter = 1000
-    #opt.continue_train = True #UNCOMMENT THIS LINE WHEN ITS TIME TO CONTINUE TRAINING
+    # opt.continue_train = True #UNCOMMENT THIS LINE WHEN ITS TIME TO CONTINUE TRAINING
     seed_torch(100)
 
     train_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "train"))
     val_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "val"))
 
-    # RealFakeDataseta will limit the number of images sampled per dataset to the length of the smallest dataset
+    # RealFakeDatasets will limit the number of images sampled per dataset to the length of the smallest dataset
     base_transforms = get_base_transforms()
     random_augs = get_random_augmentations()
     split_transforms = {
@@ -47,8 +47,19 @@ def main():
         DATASET_META['real'], modality='image', split_transforms=split_transforms)
     fake_datasets = load_and_split_datasets(
         DATASET_META['fake'], modality='image', split_transforms=split_transforms)
+
+    # Calculate the total sizes of real and fake datasets for each split
+    real_sizes = {split: sum(len(ds) for ds in real_datasets[split]) for split in ['train', 'validation', 'test']}
+    fake_sizes = {split: sum(len(ds) for ds in fake_datasets[split]) for split in ['train', 'validation', 'test']}
+
+    # Get the minimum size for each split
+    final_sizes = {split: min(real_sizes[split], fake_sizes[split]) for split in ['train', 'validation', 'test']}
+
+    print(f"Final dataset sizes (based on balancing): {final_sizes}")
+
+    # Create balanced real and fake datasets
     train_dataset, val_dataset, test_dataset = create_real_fake_datasets(
-        real_datasets, fake_datasets)
+        real_datasets, fake_datasets, source_labels=False)
 
     train_loader = DataLoader(
         train_dataset, batch_size=32, shuffle=True, num_workers=0, collate_fn=lambda d: tuple(d))
@@ -65,9 +76,9 @@ def main():
     model.train()
 
     print(f'cwd: {os.getcwd()}')
-    print(f"FROM TRAIN_DETECTOR.PY: Train dataset size: {len(train_dataset)}") #TESTING LINE
-    print(f"Validation dataset size: {len(val_dataset)}") #TESTING LINE
-    print(f"Test dataset size: {len(test_dataset)}") #TESTING LINE
+    print(f"FROM TRAIN_DETECTOR.PY: Train dataset size: {len(train_dataset)}")  # TESTING LINE
+    print(f"Validation dataset size: {len(val_dataset)}")  # TESTING LINE
+    print(f"Test dataset size: {len(test_dataset)}")  # TESTING LINE
 
     for epoch in range(opt.niter):
 
@@ -114,5 +125,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
