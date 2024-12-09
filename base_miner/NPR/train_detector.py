@@ -60,6 +60,7 @@ def main():
     # Create balanced real and fake datasets
     train_dataset, val_dataset, test_dataset = create_real_fake_datasets(
         real_datasets, fake_datasets, source_labels=False)
+    print(f"NOW! Balanced train dataset size (before DataLoader): {len(train_dataset)}")
 
     train_loader = DataLoader(
         train_dataset, batch_size=32, shuffle=True, num_workers=0, collate_fn=lambda d: tuple(d))
