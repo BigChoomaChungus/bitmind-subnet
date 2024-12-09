@@ -21,12 +21,12 @@ class BaseModel(nn.Module):
         save_filename = 'model_epoch_%s.pth' % epoch
         save_path = os.path.join(self.save_dir, save_filename)
 
-         serialize model and optimizer to dict
-         state_dict = {
-             'model': self.model.state_dict(),
-             'optimizer' : self.optimizer.state_dict(),
-             'total_steps' : self.total_steps,
-         }
+        serialize model and optimizer to dict
+        state_dict = {
+            'model': self.model.state_dict(),
+            'optimizer' : self.optimizer.state_dict(),
+            'total_steps' : self.total_steps,
+        }
 
         torch.save(self.model.state_dict(), save_path)
         print(f'Saving model {save_path}')
