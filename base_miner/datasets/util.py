@@ -108,7 +108,6 @@ def create_source_label_mapping(
 
     return source_label_mapping
 
-
 def create_real_fake_datasets(
     real_datasets: Dict[str, List[ImageDataset]],
     fake_datasets: Dict[str, List[ImageDataset]],
@@ -124,20 +123,40 @@ def create_real_fake_datasets(
             real_datasets, fake_datasets, group_sources_by_name)
 
     # Calculate total sizes for real and fake datasets
-    real_total_size = sum(len(dataset) for dataset in real_datasets['train'])
-    fake_total_size = sum(len(dataset) for dataset in fake_datasets['train'])
+    real_train_datasets = real_datasets['train']
+    fake_train_datasets = fake_datasets['train']
+    real_total_size = sum(len(dataset) for dataset in real_train_datasets)
+    fake_total_size = sum(len(dataset) for dataset in fake_train_datasets)
 
-    # Use the smaller total size to balance the datasets
+    # Use the smaller total size for balancing
     min_size = min(real_total_size, fake_total_size)
 
     print(f"Total real dataset size: {real_total_size}")  # TEST LINE
     print(f"Total fake dataset size: {fake_total_size}")  # TEST LINE
     print(f"Balanced dataset size: {min_size}")  # TEST LINE
 
+    # Trim datasets to the balanced size
+    balanced_real_datasets = []
+    balanced_fake_datasets = []
+    real_count, fake_count = 0, 0
+
+    for dataset in real_train_datasets:
+        if real_count >= min_size:
+            break
+        remaining = min_size - real_count
+        balanced_real_datasets.append(dataset[:remaining])
+        real_count += len(balanced_real_datasets[-1])
+
+    for dataset in fake_train_datasets:
+        if fake_count >= min_size:
+            break
+        remaining = min_size - fake_count
+        balanced_fake_datasets.append(dataset[:remaining])
+        fake_count += len(balanced_fake_datasets[-1])
+
     train_dataset = RealFakeDataset(
-        real_image_datasets=real_datasets['train'],
-        fake_image_datasets=fake_datasets['train'],
-        max_dataset_size=min_size,  # Ensure datasets are balanced
+        real_image_datasets=balanced_real_datasets,
+        fake_image_datasets=balanced_fake_datasets,
         source_label_mapping=source_label_mapping,
     )
 
@@ -156,7 +175,6 @@ def create_real_fake_datasets(
     if source_labels:
         return train_dataset, val_dataset, test_dataset, source_label_mapping
     return train_dataset, val_dataset, test_dataset
-
 
 def sample_dataset_index_name(image_datasets: list) -> tuple[int, str]:
     """
