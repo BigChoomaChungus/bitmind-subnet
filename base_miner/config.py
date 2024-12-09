@@ -16,7 +16,7 @@ IMAGE_DATASETS = {
     "fake": [
         #{"path": "bitmind/bm-realvisxl"}, #13 GB
         {"path": "bitmind/bm-mobius-10-17-24"}, #1.83 GB
-        #{"path": "bitmind/bm-sdxl"} #12.6 GB
+        {"path": "bitmind/bm-sdxl"} #12.6 GB
         #{"path": "/home/user/.cache/huggingface/bitmind___bm-mobius-10-17-24/default/0.0.0/dc8eb1065fb36e48a03e9cff6824cde003bcece5"},
        
     ]
