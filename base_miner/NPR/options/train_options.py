@@ -16,7 +16,7 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--last_epoch', type=int, default=-1, help='starting epoch count for scheduler intialization')
         parser.add_argument('--train_split', type=str, default='train', help='train, val, test, etc')
         parser.add_argument('--val_split', type=str, default='val', help='train, val, test, etc')
-        parser.add_argument('--niter', type=int, default=1000, help='# of iter at starting learning rate')
+        parser.add_argument('--niter', type=int, default=1000, help='# of iter at starting learning rate') #THIS IS WHAT SETS MAX EPOCHS, -1
         parser.add_argument('--beta1', type=float, default=0.9, help='momentum term of adam')
         parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate for adam')
         parser.add_argument('--continue_from_checkpoint', type=str, default='', help='full path to pth file to start training from') #THIS IS THE NEW LINE FROM DYLAN
