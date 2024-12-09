@@ -7,7 +7,7 @@ TARGET_IMAGE_SIZE = (256, 256)
 IMAGE_DATASETS = {
     "real": [
         {"path": "bitmind/bm-real"}, #6.7 GB
-        {"path": "bitmind/open-image-v7-256"} #216 GB
+        {"path": "bitmind/open-image-v7-256"}, #216 GB
         {"path": "bitmind/celeb-a-hq"}, #2.76 GB
         #{"path": "/home/user/.cache/huggingface/bitmind___celeb-a-hq/default/0.0.0/cec732e87335bc65872d90a706e865032daf80fc"},
         {"path": "bitmind/ffhq-256"},
