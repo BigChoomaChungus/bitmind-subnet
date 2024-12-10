@@ -25,99 +25,102 @@ class PatchedSubset(Subset):
             return getattr(self.dataset, attr)
         raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attr}'")
         
-def create_balanced_subsets(datasets, total_count):
-    balanced_datasets = []
-    count = 0
 
-    for dataset in datasets:
-        if count >= total_count:
-            break
-        remaining = total_count - count
-        subset_indices = list(range(min(len(dataset), remaining)))
-
-        # Wrap with PatchedSubset to preserve attributes
-        balanced_datasets.append(PatchedSubset(dataset, subset_indices))
-        count += len(subset_indices)
-
-    return balanced_datasets
 
 def create_real_fake_datasets(
     real_datasets: Dict[str, List[ImageDataset]],
     fake_datasets: Dict[str, List[ImageDataset]],
     source_labels: bool = False,
     group_sources_by_name: bool = False,
+    balanced_sizes: Dict[str, int] = None  # New argument for balanced sizes
 ) -> Tuple[RealFakeDataset, ...]:
     """
-    Combines real and fake datasets into balanced RealFakeDatasets for training, validation, and testing.
-
     Args:
-        real_datasets: Dict containing train, val, and test keys with real datasets.
-        fake_datasets: Dict containing train, val, and test keys with fake datasets.
+        real_datasets: Dict containing train, val, and test keys. Each key maps to a list of ImageDatasets.
+        fake_datasets: Dict containing train, val, and test keys. Each key maps to a list of ImageDatasets.
+        source_labels: Whether to include source labels for datasets.
+        group_sources_by_name: Whether to group fake sources by their model names.
+        balanced_sizes: Pre-calculated balanced sizes for each split (optional).
 
     Returns:
-        Balanced train, validation, and test RealFakeDatasets.
+        Train, validation, and test RealFakeDatasets (or optionally with source labels).
     """
     source_label_mapping = None
     if source_labels:
         source_label_mapping = create_source_label_mapping(
-            real_datasets, fake_datasets, group_sources_by_name
+            real_datasets, fake_datasets, group_sources_by_name)
+
+    print(f"Source label mapping: {source_label_mapping}")
+
+    datasets = {}
+    for split in ['train', 'validation', 'test']:
+        if balanced_sizes:
+            # If balanced sizes are provided, balance the datasets based on the sizes
+            balanced_real_datasets = create_balanced_subsets(real_datasets[split], balanced_sizes[split])
+            balanced_fake_datasets = create_balanced_subsets(fake_datasets[split], balanced_sizes[split])
+        else:
+            # If no balanced sizes, use the datasets as they are
+            balanced_real_datasets = real_datasets[split]
+            balanced_fake_datasets = fake_datasets[split]
+
+        # Debugging: Print the sizes after balancing
+        print(f"{split.capitalize()} balanced real dataset sizes: {[len(ds) for ds in balanced_real_datasets]}")
+        print(f"{split.capitalize()} balanced fake dataset sizes: {[len(ds) for ds in balanced_fake_datasets]}")
+
+        datasets[split] = RealFakeDataset(
+            real_image_datasets=balanced_real_datasets,
+            fake_image_datasets=balanced_fake_datasets,
+            source_label_mapping=source_label_mapping
         )
 
-    # Balance the train datasets
-    total_real_train = sum(len(ds) for ds in real_datasets['train'])
-    total_fake_train = sum(len(ds) for ds in fake_datasets['train'])
-    balanced_train_size = min(total_real_train, total_fake_train)
+    if source_labels:
+        return (
+            datasets['train'],
+            datasets['validation'],
+            datasets['test'],
+            source_label_mapping
+        )
+    return datasets['train'], datasets['validation'], datasets['test']
 
-    print(f"Total real train size: {total_real_train}")
-    print(f"Total fake train size: {total_fake_train}")
-    print(f"Balanced train size: {balanced_train_size}")
 
-    balanced_real_train = create_balanced_subsets(real_datasets['train'], balanced_train_size)
-    balanced_fake_train = create_balanced_subsets(fake_datasets['train'], balanced_train_size)
+def create_balanced_subsets(datasets: List[ImageDataset], max_dataset_size: int) -> List[ImageDataset]:
+    """
+    Balances a list of datasets by limiting their combined size to `max_dataset_size`.
+    """
+    total_size = sum(len(dataset) for dataset in datasets)
+    balanced_datasets = []
 
-    train_dataset = RealFakeDataset(
-        real_image_datasets=balanced_real_train,
-        fake_image_datasets=balanced_fake_train,
-        source_label_mapping=source_label_mapping,
-    )
+    if total_size <= max_dataset_size:
+        # If the total size is already smaller than max, return the datasets as is
+        return datasets
 
-    # Balance the validation datasets
-    total_real_val = sum(len(ds) for ds in real_datasets['validation'])
-    total_fake_val = sum(len(ds) for ds in fake_datasets['validation'])
-    balanced_val_size = min(total_real_val, total_fake_val)
+    remaining = max_dataset_size
+    for dataset in datasets:
+        if remaining <= 0:
+            break
 
-    print(f"Total real val size: {total_real_val}")
-    print(f"Total fake val size: {total_fake_val}")
-    print(f"Balanced val size: {balanced_val_size}")
+        if len(dataset) > remaining:
+            # Take only a subset of this dataset to fit the remaining size
+            balanced_datasets.append(dataset[:remaining])
+            remaining = 0
+        else:
+            # Use the full dataset
+            balanced_datasets.append(dataset)
+            remaining -= len(dataset)
 
-    balanced_real_val = create_balanced_subsets(real_datasets['validation'], balanced_val_size)
-    balanced_fake_val = create_balanced_subsets(fake_datasets['validation'], balanced_val_size)
+    return balanced_datasets
 
-    val_dataset = RealFakeDataset(
-        real_image_datasets=balanced_real_val,
-        fake_image_datasets=balanced_fake_val,
-        source_label_mapping=source_label_mapping,
-    )
 
-    # Balance the test datasets
-    total_real_test = sum(len(ds) for ds in real_datasets['test'])
-    total_fake_test = sum(len(ds) for ds in fake_datasets['test'])
-    balanced_test_size = min(total_real_test, total_fake_test)
 
-    print(f"Total real test size: {total_real_test}")
-    print(f"Total fake test size: {total_fake_test}")
-    print(f"Balanced test size: {balanced_test_size}")
 
-    balanced_real_test = create_balanced_subsets(real_datasets['test'], balanced_test_size)
-    balanced_fake_test = create_balanced_subsets(fake_datasets['test'], balanced_test_size)
 
-    test_dataset = RealFakeDataset(
-        real_image_datasets=balanced_real_test,
-        fake_image_datasets=balanced_fake_test,
-        source_label_mapping=source_label_mapping,
-    )
 
-    return train_dataset, val_dataset, test_dataset
+
+
+
+
+
+
 
 
 
