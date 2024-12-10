@@ -6,19 +6,22 @@ TARGET_IMAGE_SIZE = (256, 256)
 
 IMAGE_DATASETS = {
     "real": [
-        #{"path": "bitmind/bm-real"}, #6.7 GB
-        #{"path": "bitmind/open-image-v7-256"}, #216 GB
+        {"path": "bitmind/bm-real"}, #6.7 GB
+        {"path": "bitmind/open-image-v7-256"}, #216 GB
         {"path": "bitmind/celeb-a-hq"}, #2.76 GB
-        #{"path": "bitmind/ffhq-256"}, #7.63 GB
-        #{"path": "bitmind/MS-COCO-unique-256"} #13.6 GB
-        #{"path": "/home/user/.cache/huggingface/bitmind___celeb-a-hq/default/0.0.0/cec732e87335bc65872d90a706e865032daf80fc"},
+        {"path": "bitmind/ffhq-256"}, #7.63 GB
+        {"path": "bitmind/MS-COCO-unique-256"} #13.6 GB
+        {"path": "bitmind/AFHQ"}, #6.96 GB
+        {"path": "bitmind/lfw"}, #188 MB
+        {"path": "bitmind/caltech-256"}, #1.2 GB
+        {"path": "bitmind/caltech-101"}, #158 MB
+        {"path": "bitmind/dtd"} #629 MB
     ],
     "fake": [
-        #{"path": "bitmind/bm-realvisxl"}, #13 GB
+        {"path": "bitmind/bm-realvisxl"}, #13 GB
         {"path": "bitmind/bm-mobius"}, #14.3 GB
         {"path": "bitmind/bm-sdxl"} #12.6 GB
         #{"path": "bitmind/bm-mobius-10-17-24"}, #1.83 GB #I ADDED THIS ONE BECAUSE ITS SMALL AND I USE IT FOR DEBUGGING, DO NOT USE THIS FOR REAL TRAINING
-        #{"path": "/home/user/.cache/huggingface/bitmind___bm-mobius-10-17-24/default/0.0.0/dc8eb1065fb36e48a03e9cff6824cde003bcece5"},
        
     ]
 }
