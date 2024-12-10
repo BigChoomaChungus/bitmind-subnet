@@ -147,7 +147,7 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         "enable_model_cpu_offload": False
     },
     "prompthero/openjourney-v4" : {
-        # https://huggingface.co/datasets/bitmind/google-image-scraper___0-to-1000___openjourney-v4, 111 MB
+        # https://huggingface.co/datasets/bitmind/google-image-scraper___0-to-1000___openjourney-v4, 111 MB #### THIS IS NOT ACCURATE, JUST A BAD DATA SCRAPE
         
         "pipeline_cls": StableDiffusionPipeline,
         "from_pretrained_args": {
@@ -156,7 +156,7 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         }
     },
     "cagliostrolab/animagine-xl-3.1": {
-        # https://huggingface.co/datasets/bitmind/google-image-scraper___0-to-1000___animagine-xl-3.1, 103 MB
+        # https://huggingface.co/datasets/bitmind/google-image-scraper___0-to-1000___animagine-xl-3.1, 103 MB ### THIS IS NOT ACCURATE, JUST A BAD DATA SCRAPE
         
         "pipeline_cls": StableDiffusionXLPipeline,
         "from_pretrained_args": {
