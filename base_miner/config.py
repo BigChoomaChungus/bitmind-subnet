@@ -21,6 +21,7 @@ IMAGE_DATASETS = {
         {"path": "bitmind/bm-realvisxl"}, #13 GB
         {"path": "bitmind/bm-mobius"}, #14.3 GB
         {"path": "bitmind/bm-sdxl"} #12.6 GB
+        
         #{"path": "bitmind/bm-mobius-10-17-24"}, #1.83 GB #I ADDED THIS ONE BECAUSE ITS SMALL AND I USE IT FOR DEBUGGING, DO NOT USE THIS FOR REAL TRAINING
        
     ]
