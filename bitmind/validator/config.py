@@ -128,9 +128,9 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         }
     },
     "black-forest-labs/FLUX.1-dev": {
-        # https://huggingface.co/datasets/bitmind/bm-subnet-weekly-FLUX.1-dev-256
-        # https://huggingface.co/datasets/bitmind/ffhq-256___FLUX.1-dev
-        # https://huggingface.co/datasets/bitmind/celeb-a-hq___FLUX.1-dev
+        # https://huggingface.co/datasets/bitmind/bm-subnet-weekly-FLUX.1-dev-256 # 76 MB
+        # https://huggingface.co/datasets/bitmind/ffhq-256___FLUX.1-dev # 6.65 GB
+        # https://huggingface.co/datasets/bitmind/celeb-a-hq___FLUX.1-dev # 2.65 GB
         
         "pipeline_cls": FluxPipeline,
         "from_pretrained_args": {
