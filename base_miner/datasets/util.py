@@ -103,13 +103,12 @@ def create_balanced_subsets(datasets: List[ImageDataset], max_dataset_size: int)
             break
 
         if len(dataset) > remaining:
-            # Take only a subset of this dataset to fit the remaining size
-            # Use `.select` for slicing if this is a Hugging Face dataset
-            if hasattr(dataset, 'select'):
-                balanced_datasets.append(dataset.select(range(remaining)))
+            # Use `.select()` if the dataset supports it (Hugging Face Dataset objects)
+            if hasattr(dataset.dataset, "select"):
+                balanced_datasets.append(ImageDataset(huggingface_dataset=dataset.dataset.select(range(remaining))))
             else:
-                # Fallback if dataset is a list-like object
-                balanced_datasets.append(dataset[:remaining])
+                # For non-Hugging Face datasets
+                balanced_datasets.append(ImageDataset(huggingface_dataset=dataset[:remaining]))
             remaining = 0
         else:
             # Use the full dataset
@@ -117,6 +116,7 @@ def create_balanced_subsets(datasets: List[ImageDataset], max_dataset_size: int)
             remaining -= len(dataset)
 
     return balanced_datasets
+
 
 
 
