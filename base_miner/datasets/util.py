@@ -83,6 +83,9 @@ def create_real_fake_datasets(
     return datasets['train'], datasets['validation'], datasets['test']
 
 
+
+
+
 def create_balanced_subsets(datasets: List[ImageDataset], max_dataset_size: int) -> List[ImageDataset]:
     """
     Balances a list of datasets by limiting their combined size to `max_dataset_size`.
@@ -101,7 +104,12 @@ def create_balanced_subsets(datasets: List[ImageDataset], max_dataset_size: int)
 
         if len(dataset) > remaining:
             # Take only a subset of this dataset to fit the remaining size
-            balanced_datasets.append(dataset[:remaining])
+            # Use `.select` for slicing if this is a Hugging Face dataset
+            if hasattr(dataset, 'select'):
+                balanced_datasets.append(dataset.select(range(remaining)))
+            else:
+                # Fallback if dataset is a list-like object
+                balanced_datasets.append(dataset[:remaining])
             remaining = 0
         else:
             # Use the full dataset
@@ -109,6 +117,7 @@ def create_balanced_subsets(datasets: List[ImageDataset], max_dataset_size: int)
             remaining -= len(dataset)
 
     return balanced_datasets
+
 
 
 
