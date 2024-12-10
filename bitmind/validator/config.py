@@ -86,9 +86,18 @@ VIDEO_DATASETS = {
 IMAGE_ANNOTATION_MODEL: str = "Salesforce/blip2-opt-6.7b-coco"
 TEXT_MODERATION_MODEL: str = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
 
+
+
 # Text-to-image model configurations
-T2I_MODELS: Dict[str, Dict[str, Any]] = {
+T2I_MODELS: Dict[str, Dict[str, Any]] = { 
+
+# IT SAYS THIS ONE IS IN THERE TOO https://huggingface.co/datasets/bitmind/bm-diffusion
+    
     "stabilityai/stable-diffusion-xl-base-1.0": {
+        # https://huggingface.co/datasets/bitmind/AFHQ___stable-diffusion-xl-base-1.0, 1.63 GB
+        # https://huggingface.co/datasets/bitmind/bm-subnet-weekly-stable-diffusion-xl-base-1.0-256, 5 GB
+        # https://huggingface.co/datasets/bitmind/bm-sdxl, 12.6 GB
+        
         "pipeline_cls": StableDiffusionXLPipeline,
         "from_pretrained_args": {
             "use_safetensors": True,
@@ -98,6 +107,9 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         "use_autocast": False
     },
     "SG161222/RealVisXL_V4.0": {
+        # https://huggingface.co/datasets/bitmind/AFHQ___RealVisXL_V4.0, 1.77 GB
+        # https://huggingface.co/datasets/bitmind/bm-realvisxl (13 GB)
+        
         "pipeline_cls": StableDiffusionXLPipeline,
         "from_pretrained_args": {
             "use_safetensors": True,
@@ -106,6 +118,9 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         }
     },
     "Corcelio/mobius": {
+        # https://huggingface.co/datasets/bitmind/bm-mobius 14.3 GB
+        # https://huggingface.co/datasets/bitmind/bm-subnet-weekly-mobius-256 5.35 GB
+        
         "pipeline_cls": StableDiffusionXLPipeline,
         "from_pretrained_args": {
             "use_safetensors": True,
@@ -113,6 +128,10 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         }
     },
     "black-forest-labs/FLUX.1-dev": {
+        # https://huggingface.co/datasets/bitmind/bm-subnet-weekly-FLUX.1-dev-256
+        # https://huggingface.co/datasets/bitmind/ffhq-256___FLUX.1-dev
+        # https://huggingface.co/datasets/bitmind/celeb-a-hq___FLUX.1-dev
+        
         "pipeline_cls": FluxPipeline,
         "from_pretrained_args": {
             "use_safetensors": True,
@@ -128,6 +147,8 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         "enable_model_cpu_offload": False
     },
     "prompthero/openjourney-v4" : {
+        # https://huggingface.co/datasets/bitmind/google-image-scraper___0-to-1000___openjourney-v4, 111 MB
+        
         "pipeline_cls": StableDiffusionPipeline,
         "from_pretrained_args": {
             "use_safetensors": True,
@@ -135,6 +156,8 @@ T2I_MODELS: Dict[str, Dict[str, Any]] = {
         }
     },
     "cagliostrolab/animagine-xl-3.1": {
+        # https://huggingface.co/datasets/bitmind/google-image-scraper___0-to-1000___animagine-xl-3.1, 103 MB
+        
         "pipeline_cls": StableDiffusionXLPipeline,
         "from_pretrained_args": {
             "use_safetensors": True,
