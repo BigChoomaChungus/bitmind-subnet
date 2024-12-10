@@ -91,7 +91,7 @@ TEXT_MODERATION_MODEL: str = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
 # Text-to-image model configurations
 T2I_MODELS: Dict[str, Dict[str, Any]] = { 
 
-# IT SAYS THIS ONE IS IN THERE TOO https://huggingface.co/datasets/bitmind/bm-diffusion
+# IT SAYS THIS ONE IS IN THERE TOO https://huggingface.co/datasets/bitmind/bm-diffusion, 37.9 GB
     
     "stabilityai/stable-diffusion-xl-base-1.0": {
         # https://huggingface.co/datasets/bitmind/AFHQ___stable-diffusion-xl-base-1.0, 1.63 GB
