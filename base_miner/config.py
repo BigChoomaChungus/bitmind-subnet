@@ -10,7 +10,7 @@ IMAGE_DATASETS = {
         {"path": "bitmind/open-image-v7-256"}, #216 GB      9 million images
         {"path": "bitmind/celeb-a-hq"}, #2.76 GB,           30K images
         {"path": "bitmind/ffhq-256"}, #7.63 GB              70K images
-        {"path": "bitmind/MS-COCO-unique-256"} #13.6 GB     123K images
+        {"path": "bitmind/MS-COCO-unique-256"}, #13.6 GB     123K images
         {"path": "bitmind/AFHQ"}, #6.96 GB                  15K images
         {"path": "bitmind/lfw"}, #188 MB                    13K images
         {"path": "bitmind/caltech-256"}, #1.2 GB            30K images
