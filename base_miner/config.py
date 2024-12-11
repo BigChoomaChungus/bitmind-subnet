@@ -15,14 +15,34 @@ IMAGE_DATASETS = {
         {"path": "bitmind/lfw"}, #188 MB                    13K images
         {"path": "bitmind/caltech-256"}, #1.2 GB            30K images
         {"path": "bitmind/caltech-101"}, #158 MB            9K images
-        {"path": "bitmind/dtd"} #629 MB                     5.6K images
+        {"path": "bitmind/dtd"} #629 MB                     5.6K images (LOWEST IN REAL IMAGES)
     ],
     "fake": [
         {"path": "bitmind/bm-realvisxl"}, #13 GB            10K images
         {"path": "bitmind/bm-mobius"}, #14.3 GB             10K images
         {"path": "bitmind/bm-sdxl"} #12.6 GB                10K images
+
+        # stabilityai/stable-diffusion-xl-base-1.0
+         https://huggingface.co/datasets/bitmind/AFHQ___stable-diffusion-xl-base-1.0, # 1.63 GB
+         https://huggingface.co/datasets/bitmind/bm-subnet-weekly-stable-diffusion-xl-base-1.0-256, # 5 GB
+         https://huggingface.co/datasets/bitmind/bm-sdxl, # 12.6 GB
+
+        # SG161222/RealVisXL_V4.0
+         https://huggingface.co/datasets/bitmind/AFHQ___RealVisXL_V4.0, # 1.77 GB
+         https://huggingface.co/datasets/bitmind/bm-realvisxl # 13 GB
+
+        # Corcelio/mobius
+         https://huggingface.co/datasets/bitmind/bm-mobius # 14.3 GB
+         https://huggingface.co/datasets/bitmind/bm-subnet-weekly-mobius-256 # 5.35 GB
+
+        # black-forest-labs/FLUX.1-dev
+         https://huggingface.co/datasets/bitmind/bm-subnet-weekly-FLUX.1-dev-256 # 76 MB
+         https://huggingface.co/datasets/bitmind/ffhq-256___FLUX.1-dev # 6.65 GB
+         https://huggingface.co/datasets/bitmind/celeb-a-hq___FLUX.1-dev # 2.65 GB
         
-        #{"path": "bitmind/bm-mobius-10-17-24"}, #1.83 GB #I ADDED THIS ONE BECAUSE ITS SMALL AND I USE IT FOR DEBUGGING, DO NOT USE THIS FOR REAL TRAINING
+        # prompthero/openjourney-v4
+
+        # cagliostrolab/animagine-xl-3.1
        
     ]
 }
