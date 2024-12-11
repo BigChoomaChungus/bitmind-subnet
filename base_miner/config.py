@@ -23,23 +23,20 @@ IMAGE_DATASETS = {
         {"path": "bitmind/bm-sdxl"} #12.6 GB                10K images
 
         # stabilityai/stable-diffusion-xl-base-1.0
-         https://huggingface.co/datasets/bitmind/AFHQ___stable-diffusion-xl-base-1.0, # 1.63 GB
-         https://huggingface.co/datasets/bitmind/bm-subnet-weekly-stable-diffusion-xl-base-1.0-256, # 5 GB
-         https://huggingface.co/datasets/bitmind/bm-sdxl, # 12.6 GB
+         {"path": "bitmind/AFHQ___stable-diffusion-xl-base-1.0"}, # 1.63 GB        15.8K images
+         {"path": "bitmind/bm-sdxl"}, # 12.6 GB                                    9.5K images
 
         # SG161222/RealVisXL_V4.0
-         https://huggingface.co/datasets/bitmind/AFHQ___RealVisXL_V4.0, # 1.77 GB
-         https://huggingface.co/datasets/bitmind/bm-realvisxl # 13 GB
+         {"path": "bitmind/bm-realvisxl"}, # 13 GB                                  9.7K images
 
         # Corcelio/mobius
-         https://huggingface.co/datasets/bitmind/bm-mobius # 14.3 GB
-         https://huggingface.co/datasets/bitmind/bm-subnet-weekly-mobius-256 # 5.35 GB
+         {"path": "bitmind/bm-mobius"}, # 14.3 GB                                   9.8K images
 
         # black-forest-labs/FLUX.1-dev
-         https://huggingface.co/datasets/bitmind/bm-subnet-weekly-FLUX.1-dev-256 # 76 MB
-         https://huggingface.co/datasets/bitmind/ffhq-256___FLUX.1-dev # 6.65 GB
-         https://huggingface.co/datasets/bitmind/celeb-a-hq___FLUX.1-dev # 2.65 GB
-        
+         {"path": "bitmind/bm-subnet-weekly-FLUX.1-dev-256"}, # 76 MB
+         {"path": "bitmind/ffhq-256___FLUX.1-dev"}, # 6.65 GB
+         {"path": "bitmind/celeb-a-hq___FLUX.1-dev"} # 2.65 GB
+
         # prompthero/openjourney-v4
 
         # cagliostrolab/animagine-xl-3.1
