@@ -19,7 +19,6 @@ IMAGE_DATASETS = {
     ],
     "fake": [
         # stabilityai/stable-diffusion-xl-base-1.0
-         {"path": "bitmind/AFHQ___stable-diffusion-xl-base-1.0"}, # 1.63 GB         15.8K images
          {"path": "bitmind/bm-sdxl"}, # 12.6 GB                                     9.5K images
 
         # SG161222/RealVisXL_V4.0
