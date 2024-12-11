@@ -6,21 +6,21 @@ TARGET_IMAGE_SIZE = (256, 256)
 
 IMAGE_DATASETS = {
     "real": [
-        {"path": "bitmind/bm-real"}, #6.7 GB
-        {"path": "bitmind/open-image-v7-256"}, #216 GB
-        {"path": "bitmind/celeb-a-hq"}, #2.76 GB
-        {"path": "bitmind/ffhq-256"}, #7.63 GB
-        {"path": "bitmind/MS-COCO-unique-256"} #13.6 GB
-        {"path": "bitmind/AFHQ"}, #6.96 GB
-        {"path": "bitmind/lfw"}, #188 MB
-        {"path": "bitmind/caltech-256"}, #1.2 GB
-        {"path": "bitmind/caltech-101"}, #158 MB
-        {"path": "bitmind/dtd"} #629 MB
+        {"path": "bitmind/bm-real"}, #6.7 GB                28K images
+        {"path": "bitmind/open-image-v7-256"}, #216 GB      9 million images
+        {"path": "bitmind/celeb-a-hq"}, #2.76 GB,           30K images
+        {"path": "bitmind/ffhq-256"}, #7.63 GB              70K images
+        {"path": "bitmind/MS-COCO-unique-256"} #13.6 GB     123K images
+        {"path": "bitmind/AFHQ"}, #6.96 GB                  15K images
+        {"path": "bitmind/lfw"}, #188 MB                    13K images
+        {"path": "bitmind/caltech-256"}, #1.2 GB            30K images
+        {"path": "bitmind/caltech-101"}, #158 MB            9K images
+        {"path": "bitmind/dtd"} #629 MB                     5.6K images
     ],
     "fake": [
-        {"path": "bitmind/bm-realvisxl"}, #13 GB
-        {"path": "bitmind/bm-mobius"}, #14.3 GB
-        {"path": "bitmind/bm-sdxl"} #12.6 GB
+        {"path": "bitmind/bm-realvisxl"}, #13 GB            10K images
+        {"path": "bitmind/bm-mobius"}, #14.3 GB             10K images
+        {"path": "bitmind/bm-sdxl"} #12.6 GB                10K images
         
         #{"path": "bitmind/bm-mobius-10-17-24"}, #1.83 GB #I ADDED THIS ONE BECAUSE ITS SMALL AND I USE IT FOR DEBUGGING, DO NOT USE THIS FOR REAL TRAINING
        
