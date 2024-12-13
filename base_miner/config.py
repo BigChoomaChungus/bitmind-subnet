@@ -29,7 +29,7 @@ IMAGE_DATASETS = {
         # {"path": "bitmind/bm-realvisxl"}, # 13 GB                                  9.7K images
 
         # Corcelio/mobius
-         {"path": "bitmind/bm-mobius"} # 14.3 GB                                   9.8K images
+        # {"path": "bitmind/bm-mobius"} # 14.3 GB                                   9.8K images
 
         # black-forest-labs/FLUX.1-dev
         # {"path": "bitmind/celeb-a-hq___FLUX.1-dev"} # 2.65 GB                      30K images
