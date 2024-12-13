@@ -29,7 +29,7 @@ def seed_torch(seed=1029):
 def main():
     opt = TrainOptions().parse()
     opt.niter = 1000
-    #opt.continue_train = True #UNCOMMENT THIS LINE WHEN ITS TIME TO CONTINUE TRAINING
+    opt.continue_train = True #UNCOMMENT THIS LINE WHEN ITS TIME TO CONTINUE TRAINING
     seed_torch(100)
 
     train_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "train"))
