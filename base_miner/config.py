@@ -6,16 +6,16 @@ TARGET_IMAGE_SIZE = (256, 256)
 
 IMAGE_DATASETS = {
     "real": [
-        {"path": "bitmind/bm-real"} #6.7 GB                28K images
+        #{"path": "bitmind/bm-real"} #6.7 GB                28K images
         #{"path": "bitmind/open-image-v7-256"}, #216 GB      9 million images
         #{"path": "bitmind/celeb-a-hq"}, #2.76 GB,           30K images
         #{"path": "bitmind/ffhq-256"}, #7.63 GB              70K images
         #{"path": "bitmind/MS-COCO-unique-256"}, #13.6 GB     123K images
-        #{"path": "bitmind/AFHQ"}, #6.96 GB                  15K images
-        #{"path": "bitmind/lfw"}, #188 MB                    13K images
+        {"path": "bitmind/AFHQ"}, #6.96 GB                  15K images
+        {"path": "bitmind/lfw"}, #188 MB                    13K images
         #{"path": "bitmind/caltech-256"}, #1.2 GB            30K images
-        #{"path": "bitmind/caltech-101"}, #158 MB            9K images
-        #{"path": "bitmind/dtd"} #629 MB                     5.6K images (LOWEST IN REAL IMAGES)
+        {"path": "bitmind/caltech-101"}, #158 MB            9K images
+        {"path": "bitmind/dtd"} #629 MB                     5.6K images (LOWEST IN REAL IMAGES)
         #{"path": "bitmind/AFHQ"}
     ],
     "fake": [
@@ -26,7 +26,7 @@ IMAGE_DATASETS = {
          {"path": "bitmind/bm-sdxl"} # 12.6 GB                                     9.5K images
 
         # SG161222/RealVisXL_V4.0
-        # {"path": "bitmind/bm-realvisxl"}, # 13 GB                                  9.7K images
+         {"path": "bitmind/bm-realvisxl"}, # 13 GB                                  9.7K images
 
         # Corcelio/mobius
         # {"path": "bitmind/bm-mobius"} # 14.3 GB                                   9.8K images
